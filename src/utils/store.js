@@ -1,6 +1,4 @@
 // src/utils/store.js
-// Centralized data management with localStorage
-
 const STORAGE_KEY = 'benito_store_data';
 
 const DEFAULT_JEWELRY_CATEGORIES = [
@@ -11,10 +9,21 @@ const DEFAULT_JEWELRY_CATEGORIES = [
   { id: 'pulseras', name: 'Pulseras', image: '', lottieUrl: 'https://lottie.host/12dd8dcf-4152-449c-b7d0-bb9448664e7a/Tz7RkTie6i.lottie', storeType: 'jewelry', order: 4 },
 ];
 
+const DEFAULT_DELIVERY_LOCATIONS = [
+  { id: 'loc1', name: 'Tupac Amaru', lat: -15.5006, lng: -70.1277 },
+  { id: 'loc2', name: 'Real Plaza', lat: -15.4985, lng: -70.1234 },
+  { id: 'loc3', name: 'Plaza Bolognesi', lat: -15.4977, lng: -70.1311 },
+  { id: 'loc4', name: 'Plaza Zarumilla', lat: -15.4945, lng: -70.1290 },
+  { id: 'loc5', name: 'Centro Comercial N°2', lat: -15.5000, lng: -70.1305 },
+  { id: 'loc6', name: 'Plaza de Armas', lat: -15.4963, lng: -70.1312 },
+];
+
 const DEFAULT_DATA = {
   categories: [...DEFAULT_JEWELRY_CATEGORIES],
   products: [],
   adminPassword: 'benito2026',
+  deliveryLocations: [...DEFAULT_DELIVERY_LOCATIONS],
+  shalomImage: '',
 };
 
 export function loadStore() {
@@ -32,6 +41,13 @@ export function loadStore() {
         data.categories.push(dc);
       }
     });
+    // Ensure delivery locations exist
+    if (!data.deliveryLocations) {
+      data.deliveryLocations = [...DEFAULT_DELIVERY_LOCATIONS];
+    }
+    if (data.shalomImage === undefined) {
+      data.shalomImage = '';
+    }
     return data;
   } catch {
     saveStore(DEFAULT_DATA);
@@ -78,7 +94,6 @@ export function updateCategory(id, updates) {
 
 export function deleteCategory(id) {
   const data = loadStore();
-  // Don't delete default jewelry categories
   const defaultIds = DEFAULT_JEWELRY_CATEGORIES.map(c => c.id);
   if (defaultIds.includes(id)) return data;
   data.categories = data.categories.filter(c => c.id !== id);
@@ -137,6 +152,38 @@ export function toggleSoldOut(id) {
     data.products[idx].soldOut = !data.products[idx].soldOut;
     saveStore(data);
   }
+  return data;
+}
+
+// Delivery locations
+export function addDeliveryLocation(location) {
+  const data = loadStore();
+  data.deliveryLocations.push(location);
+  saveStore(data);
+  return data;
+}
+
+export function updateDeliveryLocation(id, updates) {
+  const data = loadStore();
+  const idx = data.deliveryLocations.findIndex(l => l.id === id);
+  if (idx !== -1) {
+    data.deliveryLocations[idx] = { ...data.deliveryLocations[idx], ...updates };
+    saveStore(data);
+  }
+  return data;
+}
+
+export function deleteDeliveryLocation(id) {
+  const data = loadStore();
+  data.deliveryLocations = data.deliveryLocations.filter(l => l.id !== id);
+  saveStore(data);
+  return data;
+}
+
+export function updateShalomImage(imageBase64) {
+  const data = loadStore();
+  data.shalomImage = imageBase64;
+  saveStore(data);
   return data;
 }
 

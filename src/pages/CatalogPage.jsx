@@ -5,6 +5,7 @@ import { IconSparkles, IconHeart, IconStars, IconArrowRight } from '@tabler/icon
 import RotatingText from '../components/RotatingText';
 import ProductCard from '../components/ProductCard';
 import CategoryCard from '../components/CategoryCard';
+import DeliverySection from '../components/DeliverySection';
 import { COLORS } from '../utils/theme';
 
 const fadeUp = {
@@ -12,12 +13,6 @@ const fadeUp = {
   whileInView: { opacity: 1, y: 0 },
   viewport: { once: true, margin: '-40px' },
   transition: { duration: 0.7, ease: [0.22, 1, 0.36, 1] },
-};
-
-const staggerContainer = {
-  initial: {},
-  whileInView: { transition: { staggerChildren: 0.1 } },
-  viewport: { once: true },
 };
 
 export default function CatalogPage({ storeData, onNavigateCategory, onNavigateSecondStore }) {
@@ -41,11 +36,15 @@ export default function CatalogPage({ storeData, onNavigateCategory, onNavigateS
   const getProductCount = (catId) =>
     (storeData?.products || []).filter(p => p.categoryId === catId).length;
 
-  const galleryImages = useMemo(() => {
-    return allJewelryProducts
+  const galleryImages = useMemo(() =>
+    allJewelryProducts
       .flatMap(p => (p.images || []).map(img => ({ image: img, text: p.title })))
-      .slice(0, 24);
-  }, [allJewelryProducts]);
+      .slice(0, 24),
+    [allJewelryProducts]
+  );
+
+  const deliveryLocations = storeData?.deliveryLocations || [];
+  const shalomImage = storeData?.shalomImage || '';
 
   return (
     <div className="main-content" style={{ position: 'relative', zIndex: 1 }}>
@@ -55,15 +54,11 @@ export default function CatalogPage({ storeData, onNavigateCategory, onNavigateS
         position: 'relative', padding: '48px 20px 40px', textAlign: 'center',
         overflow: 'hidden', background: 'rgba(255,255,255,0.85)',
       }}>
-        {/* Decorative radial gradient */}
         <div style={{
           position: 'absolute', top: '-50%', left: '50%', transform: 'translateX(-50%)',
           width: '200%', height: '200%', opacity: 0.04,
-          background: 'radial-gradient(circle, #f76707 0%, transparent 50%)',
-          pointerEvents: 'none',
+          background: 'radial-gradient(circle, #f76707 0%, transparent 50%)', pointerEvents: 'none',
         }} />
-
-        {/* Decorative dots */}
         <div style={{
           position: 'absolute', inset: 0, opacity: 0.025,
           backgroundImage: `radial-gradient(${COLORS.navy} 1px, transparent 1px)`,
@@ -71,12 +66,10 @@ export default function CatalogPage({ storeData, onNavigateCategory, onNavigateS
         }} />
 
         <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          animate={{ opacity: 1, y: 0 }}
+          initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 1, ease: [0.22, 1, 0.36, 1] }}
           style={{ position: 'relative', zIndex: 1 }}
         >
-          {/* Hummingbird couple lottie */}
           <motion.div
             animate={{ y: [0, -8, 0] }}
             transition={{ duration: 4, repeat: Infinity, ease: 'easeInOut' }}
@@ -102,26 +95,19 @@ export default function CatalogPage({ storeData, onNavigateCategory, onNavigateS
           </motion.h1>
 
           <motion.div
-            initial={{ scaleX: 0 }}
-            animate={{ scaleX: 1 }}
+            initial={{ scaleX: 0 }} animate={{ scaleX: 1 }}
             transition={{ duration: 0.8, delay: 0.5 }}
             style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 10, marginBottom: 18 }}
           >
             <div className="elegant-divider" style={{ width: 44 }} />
-            <motion.div
-              animate={{ scale: [1, 1.2, 1] }}
-              transition={{ duration: 2, repeat: Infinity, ease: 'easeInOut' }}
-            >
+            <motion.div animate={{ scale: [1, 1.2, 1] }} transition={{ duration: 2, repeat: Infinity }}>
               <IconHeart size={15} color={COLORS.orange} fill={COLORS.orange} />
             </motion.div>
             <div className="elegant-divider" style={{ width: 44 }} />
           </motion.div>
 
-          {/* Rotating text */}
           <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: 0.7 }}
+            initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.7 }}
             style={{
               fontFamily: '"Cormorant Garamond", serif', fontSize: 'clamp(1.05rem, 3.5vw, 1.35rem)',
               color: COLORS.textMuted, fontStyle: 'italic', marginBottom: 14,
@@ -142,9 +128,7 @@ export default function CatalogPage({ storeData, onNavigateCategory, onNavigateS
           </motion.div>
 
           <motion.p
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: 0.9 }}
+            initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.9 }}
             style={{
               fontFamily: '"Outfit", sans-serif', fontSize: '0.8rem',
               color: COLORS.textMuted, maxWidth: 340, margin: '0 auto', lineHeight: 1.7,
@@ -156,13 +140,12 @@ export default function CatalogPage({ storeData, onNavigateCategory, onNavigateS
         </motion.div>
       </section>
 
-      {/* ===== OFFERS SECTION ===== */}
+      {/* ===== OFFERS ===== */}
       {offerProducts.length > 0 && (
         <section style={{
           padding: '36px 16px', position: 'relative',
           background: 'linear-gradient(180deg, rgba(254,252,249,0.95) 0%, rgba(255,244,230,0.6) 100%)',
         }}>
-          {/* Decorative side accent */}
           <div style={{
             position: 'absolute', top: 0, left: 0, width: 3, height: '100%',
             background: `linear-gradient(180deg, ${COLORS.orange}, transparent)`,
@@ -170,10 +153,7 @@ export default function CatalogPage({ storeData, onNavigateCategory, onNavigateS
 
           <motion.div {...fadeUp}>
             <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 6 }}>
-              <motion.div
-                animate={{ rotate: [0, 15, -15, 0] }}
-                transition={{ duration: 3, repeat: Infinity, ease: 'easeInOut' }}
-              >
+              <motion.div animate={{ rotate: [0, 15, -15, 0] }} transition={{ duration: 3, repeat: Infinity }}>
                 <IconSparkles size={22} color={COLORS.orange} />
               </motion.div>
               <h2 style={{
@@ -192,7 +172,7 @@ export default function CatalogPage({ storeData, onNavigateCategory, onNavigateS
 
             <motion.div
               animate={{ y: [0, -5, 0] }}
-              transition={{ duration: 3, repeat: Infinity, ease: 'easeInOut' }}
+              transition={{ duration: 3, repeat: Infinity }}
               style={{ textAlign: 'center', marginBottom: 20 }}
             >
               <dotlottie-wc
@@ -211,17 +191,14 @@ export default function CatalogPage({ storeData, onNavigateCategory, onNavigateS
         </section>
       )}
 
-      {/* ===== COLLECTIONS / CATEGORIES ===== */}
+      {/* ===== COLLECTIONS ===== */}
       <section style={{
         padding: '40px 16px', position: 'relative',
         background: 'rgba(255,255,255,0.9)',
       }}>
         <motion.div {...fadeUp}>
           <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 6 }}>
-            <motion.div
-              animate={{ scale: [1, 1.15, 1] }}
-              transition={{ duration: 2.5, repeat: Infinity, ease: 'easeInOut' }}
-            >
+            <motion.div animate={{ scale: [1, 1.15, 1] }} transition={{ duration: 2.5, repeat: Infinity }}>
               <IconStars size={22} color={COLORS.orange} />
             </motion.div>
             <h2 style={{
@@ -244,8 +221,7 @@ export default function CatalogPage({ storeData, onNavigateCategory, onNavigateS
             gap: 18,
           }}>
             {jewelryCategories.map((cat, i) => (
-              <CategoryCard
-                key={cat.id} category={cat} index={i}
+              <CategoryCard key={cat.id} category={cat} index={i}
                 productCount={getProductCount(cat.id)}
                 onClick={() => onNavigateCategory(cat.id)}
               />
@@ -254,16 +230,13 @@ export default function CatalogPage({ storeData, onNavigateCategory, onNavigateS
         </motion.div>
       </section>
 
-      {/* ===== DIGITAL CATALOG SECTION ===== */}
+      {/* ===== DIGITAL CATALOG ===== */}
       <section style={{
         padding: '48px 16px', textAlign: 'center', position: 'relative',
         background: 'linear-gradient(180deg, rgba(248,249,250,0.95) 0%, rgba(255,255,255,0.9) 100%)',
       }}>
         <motion.div {...fadeUp}>
-          <motion.div
-            animate={{ y: [0, -6, 0] }}
-            transition={{ duration: 3.5, repeat: Infinity, ease: 'easeInOut' }}
-          >
+          <motion.div animate={{ y: [0, -6, 0] }} transition={{ duration: 3.5, repeat: Infinity }}>
             <dotlottie-wc
               src="https://lottie.host/843dc3e9-342c-4e58-94f5-ebdeabe52e61/TZVqV3VA2v.lottie"
               style={{ width: '150px', height: '150px', margin: '0 auto' }}
@@ -292,7 +265,6 @@ export default function CatalogPage({ storeData, onNavigateCategory, onNavigateS
           padding: '48px 0', position: 'relative', overflow: 'hidden',
           background: `linear-gradient(135deg, ${COLORS.navyDark} 0%, ${COLORS.navy} 50%, ${COLORS.navyLight} 100%)`,
         }}>
-          {/* Subtle particles overlay for gallery */}
           <div style={{
             position: 'absolute', inset: 0, opacity: 0.05,
             backgroundImage: 'radial-gradient(circle, rgba(247,103,7,0.5) 1px, transparent 1px)',
@@ -306,10 +278,7 @@ export default function CatalogPage({ storeData, onNavigateCategory, onNavigateS
             }}>
               Nuestra Galeria
             </motion.h2>
-            <motion.div
-              initial={{ scaleX: 0 }} whileInView={{ scaleX: 1 }} viewport={{ once: true }}
-              transition={{ duration: 0.6, delay: 0.2 }}
-            >
+            <motion.div initial={{ scaleX: 0 }} whileInView={{ scaleX: 1 }} viewport={{ once: true }} transition={{ duration: 0.6, delay: 0.2 }}>
               <div className="elegant-divider" style={{ background: 'linear-gradient(90deg, #f76707, #d4a574)', marginBottom: 8 }} />
             </motion.div>
             <p style={{
@@ -320,19 +289,16 @@ export default function CatalogPage({ storeData, onNavigateCategory, onNavigateS
             </p>
           </div>
 
-          {/* Scrollable gallery row */}
           <div style={{
             display: 'flex', gap: 14, overflowX: 'auto', padding: '0 16px 20px',
             scrollSnapType: 'x mandatory', WebkitOverflowScrolling: 'touch',
-            scrollbarWidth: 'none', msOverflowStyle: 'none', position: 'relative', zIndex: 1,
+            scrollbarWidth: 'none', position: 'relative', zIndex: 1,
           }}>
             {galleryImages.map((item, i) => (
-              <motion.div
-                key={i}
-                initial={{ opacity: 0, scale: 0.85, rotateY: 10 }}
-                whileInView={{ opacity: 1, scale: 1, rotateY: 0 }}
-                viewport={{ once: true, margin: '-20px' }}
-                transition={{ duration: 0.5, delay: i * 0.04 }}
+              <motion.div key={i}
+                initial={{ opacity: 0, scale: 0.85 }}
+                whileInView={{ opacity: 1, scale: 1 }}
+                viewport={{ once: true }} transition={{ duration: 0.5, delay: i * 0.04 }}
                 whileHover={{ scale: 1.05, y: -4 }}
                 style={{ flexShrink: 0, width: 170, scrollSnapAlign: 'center' }}
               >
@@ -340,34 +306,30 @@ export default function CatalogPage({ storeData, onNavigateCategory, onNavigateS
                   borderRadius: 14, overflow: 'hidden', border: '1px solid rgba(255,255,255,0.1)',
                   boxShadow: '0 8px 24px rgba(0,0,0,0.3)',
                 }}>
-                  <img src={item.image} alt={item.text} style={{
-                    width: 170, height: 170, objectFit: 'cover', display: 'block',
-                  }} />
+                  <img src={item.image} alt={item.text} style={{ width: 170, height: 170, objectFit: 'cover', display: 'block' }} />
                 </div>
                 <p style={{
                   fontFamily: '"Outfit", sans-serif', fontSize: '0.68rem',
                   color: 'rgba(255,255,255,0.55)', textAlign: 'center', marginTop: 8,
                   overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap',
-                }}>
-                  {item.text}
-                </p>
+                }}>{item.text}</p>
               </motion.div>
             ))}
           </div>
         </section>
       )}
 
-      {/* ===== SECOND STORE LINK ===== */}
+      {/* ===== DELIVERY & SHIPPING ===== */}
+      <DeliverySection deliveryLocations={deliveryLocations} shalomImage={shalomImage} />
+
+      {/* ===== SECOND STORE ===== */}
       <section style={{
         padding: '40px 20px', textAlign: 'center', position: 'relative',
         background: `linear-gradient(135deg, ${COLORS.navy} 0%, ${COLORS.navyDark} 100%)`,
         borderTop: `3px solid ${COLORS.orange}`,
       }}>
         <motion.div {...fadeUp}>
-          <motion.div
-            animate={{ y: [0, -6, 0] }}
-            transition={{ duration: 3, repeat: Infinity, ease: 'easeInOut' }}
-          >
+          <motion.div animate={{ y: [0, -6, 0] }} transition={{ duration: 3, repeat: Infinity }}>
             <dotlottie-wc
               src="https://lottie.host/5af05446-f723-40d6-a8cf-85262739629a/BJ4AfBpEnq.lottie"
               style={{ width: '90px', height: '90px', margin: '0 auto 14px' }}
@@ -397,7 +359,7 @@ export default function CatalogPage({ storeData, onNavigateCategory, onNavigateS
               color: COLORS.white, border: 'none', borderRadius: 30,
               padding: '13px 36px', fontFamily: '"Outfit", sans-serif',
               fontSize: '0.85rem', fontWeight: 500, cursor: 'pointer',
-              display: 'inline-flex', alignItems: 'center', gap: 8, letterSpacing: '0.5px',
+              display: 'inline-flex', alignItems: 'center', gap: 8,
             }}
           >
             Explorar Tienda
@@ -416,10 +378,7 @@ export default function CatalogPage({ storeData, onNavigateCategory, onNavigateS
             style={{ height: 52, marginBottom: 12, objectFit: 'contain' }}
             onError={(e) => { e.target.style.display = 'none'; }}
           />
-          <p style={{
-            fontFamily: '"Outfit", sans-serif', fontSize: '0.68rem',
-            color: COLORS.textMuted, letterSpacing: '2px',
-          }}>
+          <p style={{ fontFamily: '"Outfit", sans-serif', fontSize: '0.68rem', color: COLORS.textMuted, letterSpacing: '2px' }}>
             BENITO VIRTUAL STORE
           </p>
           <p style={{
@@ -428,17 +387,12 @@ export default function CatalogPage({ storeData, onNavigateCategory, onNavigateS
           }}>
             Elegancia en cada detalle
           </p>
-          <div style={{
-            display: 'flex', justifyContent: 'center', gap: 16, marginTop: 12,
-          }}>
+          <div style={{ display: 'flex', justifyContent: 'center', gap: 16, marginTop: 12 }}>
             {[0, 1, 2].map(i => (
-              <motion.div
-                key={i}
+              <motion.div key={i}
                 animate={{ opacity: [0.2, 0.6, 0.2] }}
                 transition={{ duration: 2, repeat: Infinity, delay: i * 0.3 }}
-                style={{
-                  width: 4, height: 4, borderRadius: '50%', background: COLORS.orange,
-                }}
+                style={{ width: 4, height: 4, borderRadius: '50%', background: COLORS.orange }}
               />
             ))}
           </div>

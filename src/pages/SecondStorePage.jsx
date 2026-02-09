@@ -3,6 +3,7 @@ import React, { useMemo } from 'react';
 import { motion } from 'framer-motion';
 import { IconShoppingBag, IconArrowLeft } from '@tabler/icons-react';
 import CategoryCard from '../components/CategoryCard';
+import DeliverySection from '../components/DeliverySection';
 import { COLORS } from '../utils/theme';
 
 export default function SecondStorePage({ storeData, onNavigateCategory, onBack }) {
@@ -28,6 +29,9 @@ export default function SecondStorePage({ storeData, onNavigateCategory, onBack 
     [allGeneralProducts]
   );
 
+  const deliveryLocations = storeData?.deliveryLocations || [];
+  const shalomImage = storeData?.shalomImage || '';
+
   return (
     <div className="main-content">
       {/* Hero */}
@@ -42,17 +46,13 @@ export default function SecondStorePage({ storeData, onNavigateCategory, onBack 
         }} />
 
         <motion.div initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.7 }}>
-          <motion.div
-            animate={{ y: [0, -8, 0] }}
-            transition={{ duration: 3.5, repeat: Infinity, ease: 'easeInOut' }}
-          >
+          <motion.div animate={{ y: [0, -8, 0] }} transition={{ duration: 3.5, repeat: Infinity }}>
             <dotlottie-wc
               src="https://lottie.host/5af05446-f723-40d6-a8cf-85262739629a/BJ4AfBpEnq.lottie"
               style={{ width: '110px', height: '110px', margin: '0 auto 18px' }}
               autoplay loop
             />
           </motion.div>
-
           <h1 style={{
             fontFamily: '"Playfair Display", serif', fontSize: 'clamp(1.5rem, 5vw, 2.1rem)',
             fontWeight: 700, color: COLORS.navy, marginBottom: 10,
@@ -78,9 +78,6 @@ export default function SecondStorePage({ storeData, onNavigateCategory, onBack 
               <IconShoppingBag size={48} color={COLORS.borderLight} />
             </motion.div>
             <p style={{ fontFamily: '"Playfair Display", serif', color: COLORS.textMuted, marginTop: 16 }}>Proximamente</p>
-            <p style={{ fontFamily: '"Outfit", sans-serif', fontSize: '0.8rem', color: COLORS.textMuted, opacity: 0.7, marginTop: 4 }}>
-              Pronto agregaremos categorias a esta tienda
-            </p>
           </div>
         ) : (
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))', gap: 18 }}>
@@ -108,14 +105,12 @@ export default function SecondStorePage({ storeData, onNavigateCategory, onBack 
           </div>
           <div style={{
             display: 'flex', gap: 14, overflowX: 'auto', padding: '0 16px 20px',
-            scrollSnapType: 'x mandatory', WebkitOverflowScrolling: 'touch', scrollbarWidth: 'none',
+            scrollSnapType: 'x mandatory', scrollbarWidth: 'none',
           }}>
             {galleryImages.map((item, i) => (
               <motion.div key={i}
-                initial={{ opacity: 0, scale: 0.85 }}
-                whileInView={{ opacity: 1, scale: 1 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.5, delay: i * 0.04 }}
+                initial={{ opacity: 0, scale: 0.85 }} whileInView={{ opacity: 1, scale: 1 }}
+                viewport={{ once: true }} transition={{ duration: 0.5, delay: i * 0.04 }}
                 whileHover={{ scale: 1.05, y: -4 }}
                 style={{ flexShrink: 0, width: 170, scrollSnapAlign: 'center' }}
               >
@@ -134,6 +129,9 @@ export default function SecondStorePage({ storeData, onNavigateCategory, onBack 
           </div>
         </section>
       )}
+
+      {/* Delivery & Shipping */}
+      <DeliverySection deliveryLocations={deliveryLocations} shalomImage={shalomImage} />
 
       {/* Back */}
       <section style={{ padding: '36px 16px', textAlign: 'center', background: 'rgba(255,255,255,0.9)' }}>

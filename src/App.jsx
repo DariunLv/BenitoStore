@@ -31,10 +31,10 @@ export default function App() {
   }, []);
 
   // IMPORTANT: Refresh data on EVERY route change so new categories/products always appear
-  useEffect(() => {
-    refreshData();
-  }, [location.pathname, refreshData]);
-
+useEffect(() => {
+  refreshData();
+  window.scrollTo(0, 0);
+}, [location.pathname, refreshData]);
   const handleLogoClick = useCallback(() => {
     clickCountRef.current += 1;
     if (clickTimerRef.current) clearTimeout(clickTimerRef.current);

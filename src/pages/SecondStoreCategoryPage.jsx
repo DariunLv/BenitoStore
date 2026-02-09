@@ -29,10 +29,11 @@ export default function SecondStoreCategoryPage({ storeData, onBack }) {
   }
 
   const hasImage = !!category.image;
+  const hasLottie = !!category.lottieUrl;
 
   return (
     <div className="main-content">
-      {/* Banner with clear background image */}
+      {/* Banner */}
       <div style={{
         position: 'relative', width: '100%', height: 200, overflow: 'hidden',
         background: `linear-gradient(135deg, ${COLORS.navy} 0%, ${COLORS.navyDark} 100%)`,
@@ -42,14 +43,10 @@ export default function SecondStoreCategoryPage({ storeData, onBack }) {
             initial={{ scale: 1.1, opacity: 0 }}
             animate={{ scale: 1, opacity: 0.85 }}
             transition={{ duration: 1, ease: 'easeOut' }}
-            style={{
-              width: '100%', height: '100%', objectFit: 'cover',
-              position: 'absolute', inset: 0,
-            }}
+            style={{ width: '100%', height: '100%', objectFit: 'cover', position: 'absolute', inset: 0 }}
           />
         )}
 
-        {/* Light bottom gradient only */}
         <div style={{
           position: 'absolute', inset: 0, zIndex: 1,
           background: hasImage
@@ -57,7 +54,6 @@ export default function SecondStoreCategoryPage({ storeData, onBack }) {
             : 'linear-gradient(0deg, rgba(26,39,68,0.5) 0%, transparent 60%)',
         }} />
 
-        {/* Decorative corners */}
         <div style={{ position: 'absolute', top: 14, right: 14, zIndex: 2, width: 20, height: 20,
           borderTop: '2px solid rgba(247,103,7,0.3)', borderRight: '2px solid rgba(247,103,7,0.3)', borderRadius: '0 5px 0 0',
         }} />
@@ -69,9 +65,7 @@ export default function SecondStoreCategoryPage({ storeData, onBack }) {
           position: 'absolute', inset: 0, display: 'flex', flexDirection: 'column',
           alignItems: 'center', justifyContent: 'flex-end', paddingBottom: 22, gap: 6, zIndex: 3,
         }}>
-          <motion.h1
-            initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.7 }}
+          <motion.h1 initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.7 }}
             style={{
               fontFamily: '"Playfair Display", serif', fontSize: 'clamp(1.4rem, 5vw, 1.7rem)',
               fontWeight: 700, color: COLORS.white, textShadow: '0 2px 8px rgba(0,0,0,0.4)',
@@ -91,8 +85,48 @@ export default function SecondStoreCategoryPage({ storeData, onBack }) {
         </div>
       </div>
 
+      {/* ===== LOTTIE STICKER BELOW BANNER ===== */}
+      {hasLottie && (
+        <motion.div
+          initial={{ opacity: 0, y: 20, scale: 0.7 }}
+          animate={{ opacity: 1, y: 0, scale: 1 }}
+          transition={{ duration: 0.6, delay: 0.3, type: 'spring', stiffness: 150 }}
+          style={{
+            display: 'flex', flexDirection: 'column', alignItems: 'center',
+            padding: '20px 16px 8px',
+            background: 'linear-gradient(180deg, rgba(254,252,249,0.98) 0%, rgba(255,255,255,0.95) 100%)',
+          }}
+        >
+          <motion.div
+            animate={{ y: [0, -6, 0] }}
+            transition={{ duration: 3, repeat: Infinity, ease: 'easeInOut' }}
+            style={{
+              background: 'rgba(247,103,7,0.06)',
+              borderRadius: '50%',
+              padding: 16,
+              border: '1px solid rgba(247,103,7,0.12)',
+              boxShadow: '0 4px 20px rgba(247,103,7,0.08)',
+            }}
+          >
+            <dotlottie-wc
+              src={category.lottieUrl}
+              style={{ width: '72px', height: '72px' }}
+              autoplay loop
+            />
+          </motion.div>
+          <motion.div
+            initial={{ scaleX: 0 }} animate={{ scaleX: 1 }}
+            transition={{ duration: 0.4, delay: 0.6 }}
+            style={{
+              width: 40, height: 1.5, borderRadius: 1, marginTop: 12,
+              background: `linear-gradient(90deg, transparent, ${COLORS.orange}50, transparent)`,
+            }}
+          />
+        </motion.div>
+      )}
+
       {/* Products */}
-      <section style={{ padding: '28px 16px 32px', background: 'rgba(255,255,255,0.9)' }}>
+      <section style={{ padding: '20px 16px 32px', background: 'rgba(255,255,255,0.9)' }}>
         {products.length === 0 ? (
           <div style={{ textAlign: 'center', padding: '60px 20px' }}>
             <motion.div animate={{ y: [0, -8, 0] }} transition={{ duration: 3, repeat: Infinity }}>
